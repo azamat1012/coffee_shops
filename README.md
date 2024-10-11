@@ -50,5 +50,3 @@ python func.py
 python main.py
 ```
 
-Перейдите в браузер и откройте адрес [http://localhost:5000](http://localhost:5000), чтобы увидеть карту.
-```
