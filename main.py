@@ -1,5 +1,6 @@
-from flask import Flask
 import os
+
+from flask import Flask
 
 CURRENT_PATH = os.path.dirname(__file__)
 MAP_PATH = f"{CURRENT_PATH}/coffee_map.html"
@@ -9,6 +10,7 @@ def start():
         return file.read()
 
 app = Flask(__name__)
+
 app.add_url_rule("/", "main", start)
 
 if __name__ == "__main__":
