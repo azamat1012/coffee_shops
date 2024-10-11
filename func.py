@@ -1,17 +1,17 @@
+
 import os
 import json
-
 
 import requests
 from geopy import distance
 import folium
 from dotenv import load_dotenv
 
-
-current_path = os.path.dirname(__file__)
-
-load_dotenv(f"{current_path}/secrets.env")
-apikey = os.getenv("API")
+CURRENT_PATH = os.path.dirname(__file__)
+load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
+API_KEY = os.getenv("API")
+COFFEE_JSON_PATH = os.path.join(CURRENT_PATH, "coffee.json")
+OUTPUT_MAP_PATH = f"{CURRENT_PATH}/coffee_map.html"
 
 
 def fetch_coordinates(apikey, address):
@@ -33,58 +33,50 @@ def fetch_coordinates(apikey, address):
     return lon, lat
 
 
-def generate_map():
-    try:
-        with open(f"{current_path}/coffee.json", "r", encoding="CP1251") as data_file:
-            file_content = json.load(data_file)
-    except Exception as e:
-        print(f"Error: {e}")
-        return
+def get_distance(shop):
+    return shop["Distance"]
 
-    coords_A = input("Где вы находитесь? ")
-    coords_A = fetch_coordinates(apikey, coords_A)
-    long_A, lat_A = coords_A
-    all_coffee_shops = []
 
-    for content in file_content:
-        name = content['Name']
-        latitude = float(content['Latitude_WGS84'])
-        longitude = float(content['Longitude_WGS84'])
-        total_distance = distance.distance(
-            (lat_A, long_A), (latitude, longitude)).km
+def main():
 
-        coffee_shop_info = {
+    with open(COFFEE_JSON_PATH, "r", encoding="CP1251") as data_file:
+        coffee_shops = json.load(data_file)
+
+    user_address = input("Где вы находитесь? ")
+    user_coords = fetch_coordinates(API_KEY, user_address)
+
+    long_user, lat_user = user_coords
+    coffee_shop_data = []
+
+    for shop in coffee_shops:
+        name = shop['Name']
+        latitude = float(shop['Latitude_WGS84'])
+        longitude = float(shop['Longitude_WGS84'])
+        shop_distance = distance.distance(
+            (lat_user, long_user), (latitude, longitude)).km
+
+        coffee_shop_data.append({
             "Title": name,
-            "Distance": total_distance,
-            "latitude": latitude,
-            "longitude": longitude,
-        }
-        all_coffee_shops.append(coffee_shop_info)
+            "Distance": shop_distance,
+            "Latitude": latitude,
+            "Longitude": longitude,
+        })
 
-    def get_distance(shop):
-        return shop["Distance"]
+    nearest_shops = sorted(coffee_shop_data, key=get_distance)[:5]
 
-    nearest_shops = sorted(all_coffee_shops, key=get_distance)[:5]
-    print(f"Ваши координаты: {coords_A}\n{nearest_shops[:5]}")
-
-    m = folium.Map(location=(float(lat_A), float(long_A)), zoom_start=12)
+    coffee_map = folium.Map(
+        location=(float(lat_user), float(long_user)), zoom_start=12)
 
     for shop in nearest_shops:
-        lat = float(shop['latitude'])
-        lon = float(shop['longitude'])
         folium.Marker(
-            location=[lat, lon],
-            tooltip=shop['Title'],
+            location=[shop["Latitude"], shop["Longitude"]],
+            tooltip=shop["Title"],
             popup=f"{shop['Title']}: {shop['Distance']:.2f} км",
             icon=folium.Icon(icon="cloud"),
-        ).add_to(m)
+        ).add_to(coffee_map)
 
-    try:
-        output_file = f"{current_path}/coffee_map.html"
-        m.save(output_file)
-    except Exception as e:
-        print(f"Error: {e}")
+    coffee_map.save(OUTPUT_MAP_PATH)
 
 
 if __name__ == "__main__":
-    generate_map()
+    main()
