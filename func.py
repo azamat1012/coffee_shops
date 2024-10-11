@@ -8,11 +8,11 @@ import folium
 from dotenv import load_dotenv
 
 CURRENT_PATH = os.path.dirname(__file__)
-load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
 API_KEY = os.getenv("API")
 COFFEE_JSON_PATH = os.path.join(CURRENT_PATH, "coffee.json")
 OUTPUT_MAP_PATH = f"{CURRENT_PATH}/coffee_map.html"
 
+load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
 
 def fetch_coordinates(apikey, address):
     base_url = "https://geocode-maps.yandex.ru/1.x"
