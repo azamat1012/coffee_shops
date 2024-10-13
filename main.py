@@ -1,9 +1,9 @@
 import os
-
 from flask import Flask
 
 CURRENT_PATH = os.path.dirname(__file__)
 MAP_PATH = f"{CURRENT_PATH}/coffee_map.html"
+
 app = Flask(__name__)
 
 def start():
