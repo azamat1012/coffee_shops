@@ -5,8 +5,11 @@ from geopy import distance
 import folium
 from dotenv import load_dotenv
 
+
 CURRENT_PATH = os.path.dirname(__file__)
 load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
+
+
 API_KEY = os.getenv("API")
 COFFEE_JSON_PATH = os.path.join(CURRENT_PATH, "coffee.json")
 OUTPUT_MAP_PATH = f"{CURRENT_PATH}/coffee_map.html"
