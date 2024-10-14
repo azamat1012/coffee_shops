@@ -33,7 +33,6 @@ def main():
     OUTPUT_MAP_PATH = os.path.join(CURRENT_PATH, "coffee_map.html")
     load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
     
-    
     with open(COFFEE_JSON_PATH, "r", encoding="CP1251") as data_file:
         coffee_shops = json.load(data_file)
 
