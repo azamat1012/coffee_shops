@@ -27,12 +27,12 @@ def get_distance(shop):
 
 def main():
     
-    CURRENT_PATH = os.path.dirname(__file__)
-    load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
-    
+    CURRENT_PATH = os.path.dirname(__file__)    
     API_KEY = os.getenv("API")
     COFFEE_JSON_PATH = os.path.join(CURRENT_PATH, "coffee.json")
     OUTPUT_MAP_PATH = os.path.join(CURRENT_PATH, "coffee_map.html")
+    load_dotenv(os.path.join(CURRENT_PATH, 'secrets.env'))
+    
     
     with open(COFFEE_JSON_PATH, "r", encoding="CP1251") as data_file:
         coffee_shops = json.load(data_file)
