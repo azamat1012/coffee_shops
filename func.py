@@ -29,10 +29,10 @@ def get_distance(shop):
 def main(): 
     load_dotenv("secrets.env") 
     API_KEY = os.getenv("API") 
-    COFFEE_JSON_PATH = "coffee.json" 
-    OUTPUT_MAP_PATH = "coffee_map.html" 
+    coffee_json_path = "coffee.json" 
+    output_map_path = "coffee_map.html" 
     
-    with open(COFFEE_JSON_PATH, "r", encoding="CP1251") as data_file: 
+    with open(coffee_json_path, "r", encoding="CP1251") as data_file: 
         coffee_shops = json.load(data_file) 
  
     user_address = input("Где вы находитесь? ") 
@@ -67,7 +67,7 @@ def main():
             icon=folium.Icon(icon="cloud"), 
         ).add_to(coffee_map) 
  
-    coffee_map.save(OUTPUT_MAP_PATH) 
+    coffee_map.save(output_map_path) 
  
 if __name__ == "__main__": 
     main()
