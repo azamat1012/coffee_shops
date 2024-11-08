@@ -28,7 +28,7 @@ def get_distance(shop):
  
 def main(): 
     load_dotenv("secrets.env") 
-    API_KEY = os.getenv("API") 
+    api_key = os.getenv("API") 
     coffee_json_path = "coffee.json" 
     output_map_path = "coffee_map.html" 
     
@@ -36,7 +36,7 @@ def main():
         coffee_shops = json.load(data_file) 
  
     user_address = input("Где вы находитесь? ") 
-    user_coords = fetch_coordinates(API_KEY, user_address) 
+    user_coords = fetch_coordinates(api_key, user_address) 
     long_user, lat_user = user_coords 
  
     coffee_shop_data = [] 
